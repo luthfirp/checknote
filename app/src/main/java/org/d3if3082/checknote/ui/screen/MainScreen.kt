@@ -1,8 +1,10 @@
 package org.d3if3082.checknote.ui.screen
 
+import MainViewModel
+import android.content.Context
+import android.content.Intent
 import android.content.res.Configuration
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -15,6 +17,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Info
+import androidx.compose.material.icons.filled.Share
 import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
@@ -26,6 +29,8 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -39,14 +44,15 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import org.d3if3082.checknote.R
-import org.d3if3082.checknote.model.Note
+import org.d3if3082.checknote.model.Notes
 import org.d3if3082.checknote.navigation.Screen
 import org.d3if3082.checknote.ui.theme.CheckNoteTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MainScreen(navController: NavHostController) {
+fun MainScreen(navController: NavHostController, viewModel: MainViewModel = viewModel()) {
     val context = LocalContext.current
+    val notes by viewModel.data.observeAsState(emptyList())
     Scaffold(
         topBar = {
             TopAppBar(
@@ -60,6 +66,17 @@ fun MainScreen(navController: NavHostController) {
                 actions = {
                     IconButton(
                         onClick = {
+                            shareList(context, notes)
+                        }
+                    ) {
+                        Icon(
+                            imageVector = Icons.Filled.Share,
+                            contentDescription = null,
+                            tint = MaterialTheme.colorScheme.primary
+                        )
+                    }
+                    IconButton(
+                        onClick = {
                             navController.navigate(Screen.Info.route)
                         }
                     ) {
@@ -69,6 +86,7 @@ fun MainScreen(navController: NavHostController) {
                             tint = MaterialTheme.colorScheme.primary
                         )
                     }
+
                 }
             )
         },
@@ -82,7 +100,7 @@ fun MainScreen(navController: NavHostController) {
                     tint = MaterialTheme.colorScheme.primary
                 )
             }
-        }
+        },
     ) { padding ->
         ScreenContent(Modifier.padding(padding))
     }
@@ -90,11 +108,9 @@ fun MainScreen(navController: NavHostController) {
 
 
 @Composable
-fun ScreenContent(modifier: Modifier) {
-    val viewModel: MainViewModel = viewModel()
-    val data = viewModel.data
-    val context = LocalContext.current
-    if (data.isEmpty()) {
+fun ScreenContent(modifier: Modifier, viewModel: MainViewModel = viewModel()) {
+    val data by viewModel.data.observeAsState(emptyList())
+    if (viewModel.isDataEmpty()) {
         Column(
             modifier = modifier
                 .fillMaxWidth()
@@ -117,37 +133,51 @@ fun ScreenContent(modifier: Modifier) {
             modifier = modifier.fillMaxSize(),
             contentPadding = PaddingValues(bottom = 78.dp)
         ) {
-            items(data) {
-                ListItem(note = it) {
-                    val feedback = context.getString(R.string.list_click, it.judul)
-                }
-                Divider()
+            items(data) { note ->
+                ListItem(notes = note)
             }
         }
     }
 }
 
 @Composable
-fun ListItem(note: Note, onClick: () -> Unit) {
+fun ListItem(notes: Notes) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(20.dp)
-            .clickable { onClick() },
+            .padding(20.dp),
         verticalArrangement = Arrangement.spacedBy(5.dp)
     ) {
         Text(
-            text = note.judul,
+            text = notes.judul,
             maxLines = 1,
             overflow = TextOverflow.Ellipsis,
             fontWeight = FontWeight.Bold
         )
         Text(
-            text = note.desc,
+            text = notes.desc,
             overflow = TextOverflow.Ellipsis
         )
     }
+    Divider()
 }
+
+
+fun shareList(context: Context, list: List<Notes>) {
+    val intent = Intent(Intent.ACTION_SEND)
+    intent.type = "text/plain"
+
+    val data = StringBuilder()
+    data.append(R.string.share).append("\n\n")
+    for (note in list) {
+        data.append(note.judul).append("\n")
+        data.append(note.desc).append("\n")
+    }
+
+    intent.putExtra(Intent.EXTRA_TEXT, data.toString())
+    context.startActivity(Intent.createChooser(intent, R.string.share_with.toString()))
+}
+
 
 @Preview(uiMode = Configuration.UI_MODE_NIGHT_YES, showBackground = true)
 @Composable

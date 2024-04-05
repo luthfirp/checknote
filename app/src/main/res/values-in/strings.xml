@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">CheckNote</string>
+    <string name="about">Informasi Aplikasi</string>
+    <string name="info">CheckNote adalah sebuah aplikasi Android simple yang bisa digunakan untuk mencatat ataupun menjadi pengingat. \\n\\n(Tekan tombol + untuk membuat note baru)</string>
+    <string name="list_kosong">Tidak ada note yang dapat ditampilkan</string>
+    <string name="tambah_note">Tambah Note Baru</string>
+    <string name="info_tambah">Silahkan masukkan judul dan deskripsi note</string>
+    <string name="judul">Judul</string>
+    <string name="deskripsi">Deskripsi</string>
+    <string name="tambah">Tambah</string>
+    <string name="tambah_click">Tambah note sukses!</string>
+    <string name="tambah_error">Field tidak boleh kosong!</string>
+    <string name="share">Jangan Lupa!</string>
+    <string name="share_with">Bagikan Dengan</string>
+</resources>

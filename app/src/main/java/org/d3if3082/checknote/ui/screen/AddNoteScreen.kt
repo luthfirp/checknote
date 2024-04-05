@@ -1,6 +1,8 @@
 package org.d3if3082.checknote.ui.screen
 
+import MainViewModel
 import android.content.res.Configuration
+import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -26,21 +28,27 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import org.d3if3082.checknote.R
+import org.d3if3082.checknote.model.Notes
 import org.d3if3082.checknote.ui.theme.CheckNoteTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AddNoteScreen(navController: NavController) {
+fun AddNoteScreen(navController: NavController, viewModel: MainViewModel = viewModel()) {
     var judul by remember { mutableStateOf("") }
+    var judulError by remember { mutableStateOf(false) }
     var deskripsi by remember { mutableStateOf("") }
+    var deskripsiError by remember { mutableStateOf(false) }
+    val context = LocalContext.current
     Scaffold(
         topBar = {
             TopAppBar(
@@ -69,13 +77,13 @@ fun AddNoteScreen(navController: NavController) {
             modifier = Modifier
                 .padding(padding)
                 .padding(20.dp),
-            style = MaterialTheme.typography.bodyLarge
+            style = MaterialTheme.typography.bodyMedium
         )
     }
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(top = 150.dp),
+            .padding(top = 120.dp),
         verticalArrangement = Arrangement.spacedBy(15.dp)
     ) {
         OutlinedTextField(
@@ -105,7 +113,21 @@ fun AddNoteScreen(navController: NavController) {
                 .padding(horizontal = 20.dp),
         )
         Button(
-            onClick = {},
+            onClick = {
+                judulError = (judul == "")
+                deskripsiError = (deskripsi == "")
+                if (judulError || deskripsiError) {
+                    val error = context.getString(R.string.tambah_error)
+                    Toast.makeText(context, error, Toast.LENGTH_SHORT).show()
+                    return@Button
+                }
+                viewModel.addNote(Notes(judul, deskripsi))
+                navController.popBackStack()
+                judul = ""
+                deskripsi = ""
+                val pesan = context.getString(R.string.tambah_click)
+                Toast.makeText(context, pesan, Toast.LENGTH_SHORT).show()
+            },
             modifier = Modifier.padding(top = 6.dp, start = 20.dp),
             contentPadding = PaddingValues(horizontal = 15.dp, vertical = 12.dp)
         ) {
