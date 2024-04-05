@@ -7,13 +7,13 @@ class MainViewModel : ViewModel() {
     private val _data = MutableLiveData<List<Notes>>()
     val data: LiveData<List<Notes>> = _data
 
-//    init {
-//        _data.value = getDataDummy()
-//    }
+    init {
+        _data.value = getDataDummy()
+    }
 
     private fun getDataDummy(): List<Notes> {
         val data = mutableListOf<Notes>()
-        for (i in 1 until 2) {
+        for (i in 1 until 8) {
             data.add(
                 Notes(
                     "This is Title",
