@@ -8,7 +8,7 @@ class MainViewModel : ViewModel() {
 
     private fun getDataNote(): List<Note> {
         val data = mutableListOf<Note>()
-        for (i in 1 until 5) {
+        for (i in 1 until 8) {
             data.add(
                 Note(
                     i.toLong(),
