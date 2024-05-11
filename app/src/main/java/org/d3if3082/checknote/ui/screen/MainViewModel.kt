@@ -1,36 +1,54 @@
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
+package org.d3if3082.checknote.ui.screen
+
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.launch
+import org.d3if3082.checknote.database.NotesDao
 import org.d3if3082.checknote.model.Notes
 
-class MainViewModel : ViewModel() {
-    private val _data = MutableLiveData<List<Notes>>()
-    val data: LiveData<List<Notes>> = _data
+class MainViewModel(private val dao: NotesDao): ViewModel() {
 
-    init {
-        _data.value = getDataDummy()
-    }
+    val data: StateFlow<List<Notes>> = dao.getNotes().stateIn(
+        scope = viewModelScope,
+        started = SharingStarted.WhileSubscribed(5000L),
+        initialValue = emptyList()
+    )
+    fun insert(judul: String, desc: String, kategori: String) {
+        val notes = Notes(
+            judul = judul,
+            desc = desc,
+            kategori = kategori
+        )
 
-    private fun getDataDummy(): List<Notes> {
-        val data = mutableListOf<Notes>()
-        for (i in 1 until 8) {
-            data.add(
-                Notes(
-                    "This is Title",
-                    "This is description, lorem ipsum"
-                )
-            )
+        viewModelScope.launch(Dispatchers.IO) {
+            dao.insert(notes)
         }
-        return data
     }
 
-    fun addNote(note: Notes) {
-        val currentData = _data.value?.toMutableList() ?: mutableListOf()
-        currentData.add(note)
-        _data.value = currentData
+    suspend fun getNotes(id: Long): Notes? {
+        return dao.getNotesById(id)
     }
 
-    fun isDataEmpty(): Boolean {
-        return _data.value.isNullOrEmpty()
+    fun update(id: Long, judul: String, desc: String, kategori: String) {
+        val notes = Notes(
+            id = id,
+            judul = judul,
+            desc = desc,
+            kategori = kategori
+        )
+
+        viewModelScope.launch(Dispatchers.IO) {
+            dao.update(notes)
+        }
+    }
+
+    fun delete(id: Long) {
+        viewModelScope.launch(Dispatchers.IO) {
+            dao.deleteById(id)
+        }
     }
 }

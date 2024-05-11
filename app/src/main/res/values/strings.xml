@@ -13,5 +13,15 @@
     <string name="tambah_click">Add note success!</string>
     <string name="share">Dont Forget!</string>
     <string name="share_with">Share With</string>
-
+    <string name="kembali">Back</string>
+    <string name="simpan">Save</string>
+    <string name="edit_catatan">Edit data</string>
+    <string name="invalid">Title and category cannot empty!</string>
+    <string name="lainnya">More…</string>
+    <string name="hapus">Delete note</string>
+    <string name="pesan_hapus">Are you sure?</string>
+    <string name="tombol_hapus">Delete</string>
+    <string name="tombol_batal">Cancel</string>
+    <string name="list">List View</string>
+    <string name="grid">Grid View</string>
 </resources>
