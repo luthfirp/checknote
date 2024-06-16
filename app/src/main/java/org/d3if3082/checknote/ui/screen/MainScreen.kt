@@ -187,20 +187,22 @@ fun MainScreen(navController: NavHostController) {
             )
         },
         floatingActionButton = {
-            FloatingActionButton(onClick = {
-                val options = CropImageContractOptions(
-                    null, CropImageOptions(
-                        imageSourceIncludeGallery = true,
-                        imageSourceIncludeCamera = true,
-                        fixAspectRatio = true
+            if (user.email != "") {
+                FloatingActionButton(onClick = {
+                    val options = CropImageContractOptions(
+                        null, CropImageOptions(
+                            imageSourceIncludeGallery = true,
+                            imageSourceIncludeCamera = true,
+                            fixAspectRatio = true
+                        )
                     )
-                )
-                launcher.launch(options)
-            }) {
-                Icon(
-                    imageVector = Icons.Default.Add,
-                    contentDescription = stringResource(id = R.string.tambah_note)
-                )
+                    launcher.launch(options)
+                }) {
+                    Icon(
+                        imageVector = Icons.Default.Add,
+                        contentDescription = stringResource(id = R.string.tambah_note)
+                    )
+                }
             }
         }
     ) { padding ->
