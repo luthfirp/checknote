@@ -59,7 +59,6 @@ fun TambahNotesDialog(
                 )
                 Spacer(modifier = Modifier.padding(8.dp))
 
-                // Menampilkan image dari Uri menggunakan Image
                 uri?.let {
                     Image(
                         painter = rememberAsyncImagePainter(uri),
@@ -88,7 +87,7 @@ fun TambahNotesDialog(
                     label = { Text(text = stringResource(id = R.string.deskripsi)) },
                     maxLines = 1,
                     keyboardOptions = KeyboardOptions(
-                        capitalization = KeyboardCapitalization.Words,
+                        capitalization = KeyboardCapitalization.Sentences,
                         imeAction = ImeAction.Next
                     ),
                     modifier = Modifier.padding(top = 8.dp)

@@ -9,8 +9,8 @@ import okhttp3.OkHttpClient
 import okhttp3.RequestBody
 import okhttp3.ResponseBody
 import okhttp3.logging.HttpLoggingInterceptor
-import org.d3if3082.checknote.model.Notes
 import org.d3if3082.checknote.model.MetaDataResponse
+import org.d3if3082.checknote.model.Notes
 import org.d3if3082.checknote.model.OpStatus
 import org.json.JSONObject
 import retrofit2.Response
