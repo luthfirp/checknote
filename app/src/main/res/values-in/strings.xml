@@ -24,4 +24,13 @@
     <string name="tombol_batal">Batal</string>
     <string name="list">Tampilan list</string>
     <string name="grid">Tampilan grid</string>
+    <string name="profil">Profil</string>
+    <string name="tambah_note_sukses">Telah menambahkan note baru</string>
+    <string name="hapus_note_sukses">Note telah terhapus</string>
+    <string name="memuat">Memuat</string>
+    <string name="error">Gagal memuat, coba lagi nanti</string>
+    <string name="coba_lagi">Coba lagi</string>
+    <string name="gambar">Gambar</string>
+    <string name="tutup">Tutup</string>
+    <string name="kategori">Kategori</string>
 </resources>
